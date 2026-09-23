@@ -1,0 +1,62 @@
+{% extends "plantilla_base.html" %}
+
+{% block link_datatable %}
+    <link href="https://cdn.datatables.net/3.1.1/css/dataTables.dataTables.css" rel="stylesheet" integrity="sha384-2k9uLoQeYmuou+pC4erXygdeL+yT3d6Ila9GLHKP6ePBTHikB2cJUBB+WvpOcROP" crossorigin="anonymous">
+    <link href="https://cdn.datatables.net/buttons/4.1.1/css/buttons.dataTables.css" rel="stylesheet" integrity="sha384-/67MqXUrb5M8lncOr8u166MmUUgiBQBtQ37D5R9oATTpliKaUM71iqrcYC1vsOZK" crossorigin="anonymous">
+{% endblock %}
+
+{% block content %}
+    <h3 class="mb-4">Lista de Clientes</h3>
+    
+    <table id="tablaClientes" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.id }}</td>
+                <td>{{ cliente.nombre }}</td>
+                <td>{{ cliente.apellidos }}</td>
+                <td>{{ cliente.email|default_if_none:"-" }}</td>
+                <td>{{ cliente.telefono|default_if_none:"-" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No hay clientes registrados en el sistema.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block script %}
+    <script src="https://cdn.datatables.net/3.1.1/js/dataTables.js" integrity="sha384-p1VGlkHCPsCXIHfcvArM2cZKql8uqNTxM9Cowe98KhAuUgKEVvX0y4+5+SiVYc3m" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/buttons/4.1.1/js/dataTables.buttons.js" integrity="sha384-zC5fIuqAfxgBzDLpOHknJEtdnHkh/NV2An4ZBt8ipLO+NYq9rgoOvo65oYfGDdHe" crossorigin="anonymous"></script>
+
+    <!-- Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/4.1.1/js/buttons.html5.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const table = new DataTable('#tablaClientes', {
+                layout: {
+                    topStart: {
+                        buttons: ['excelHtml5']
+                    }
+                },
+                // Traduce la interfaz al español
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-MX.json'
+                }
+            });
+        });
+    </script>
+{% endblock %}
