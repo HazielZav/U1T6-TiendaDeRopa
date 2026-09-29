@@ -1,0 +1,38 @@
+{% extends "plantilla_base.html" %}
+
+{% block content %}
+  <h1>Actualizar Inventario: {{ ropa.modelo }}</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>Color</th>
+          <th>Talla</th>
+          <th>Unidades (Formulario Django)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items_formulario %}
+          <tr>
+            <td>{{ item.inventario.color.nombre }}</td>
+            <td>{{ item.inventario.talla.nombre }}</td>
+            <td> 
+                <div class="form-group mb-0">
+                    {{ item.form.unidades }}
+                    {% if item.form.unidades.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ item.form.unidades.errors }}
+                    </div>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <br>
+    <button type="submit">Guardar Inventario</button>
+  </form>
+{% endblock %}
