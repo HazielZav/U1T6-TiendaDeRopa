@@ -8,6 +8,9 @@ from django.urls import reverse
 from .forms import InventarioForm
 
 # Create your views here.
+def inicio(request):
+    return render(request, "tienda/inicio.html")
+
 def lista_clientes(request):
     clientes = Cliente.objects.all()
 
