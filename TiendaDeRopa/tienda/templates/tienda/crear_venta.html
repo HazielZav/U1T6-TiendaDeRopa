@@ -1,0 +1,68 @@
+{% extends "plantilla_base.html" %}
+{% block title %}Nueva Venta · Sistema Tienda{% endblock %}
+{% block content %}
+  <h1 class="mb-3">Nueva Venta</h1>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="cliente" class="form-label">Cliente</label>
+      <select name="cliente" id="cliente" class="form-select" required>
+        <option value="{{ cliente_publico.id }}" selected>{{ cliente_publico }}</option>
+        {% for cliente in clientes %}
+          {% if cliente.id != cliente_publico.id %}
+            <option value="{{ cliente.id }}">{{ cliente }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Productos Disponibles</label>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Seleccionar</th>
+            <th>Código</th>
+            <th>Producto</th>
+            <th>Color</th>
+            <th>Talla</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for inventario in inventarios %}
+            <tr>
+              <td>
+                <input type="checkbox" name="inventario" value="{{ inventario.id }}">
+              </td>
+              <td>{{ inventario.codigo }}</td>
+              <td>{{ inventario.ropa.modelo }} - {{ inventario.ropa.marca }}</td>
+              <td>{{ inventario.color.nombre }}</td>
+              <td>{{ inventario.talla.nombre }}</td>
+              <td>${{ inventario.ropa.precio }}</td>
+              <td>{{ inventario.unidades }}</td>
+              <td>
+                <input type="number" name="cantidad" class="form-control form-control-sm" min="1" max="{{ inventario.unidades }}" value="1">
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="8" class="text-center">No hay productos disponibles en inventario</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <button type="submit" class="btn btn-success">Realizar Venta</button>
+    <a href="{% url 'inicio' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+{% endblock %}

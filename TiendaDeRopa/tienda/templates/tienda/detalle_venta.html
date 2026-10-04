@@ -1,0 +1,44 @@
+{% extends "plantilla_base.html" %}
+{% block title %}Detalle Venta #{{ venta.id }} · Sistema Tienda{% endblock %}
+{% block content %}
+  <h1 class="mb-3">Detalle de Venta #{{ venta.id }}</h1>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <p><strong>Fecha:</strong> {{ venta.fecha|date:"Y-m-d H:i" }}</p>
+      <p><strong>Cliente:</strong> {{ venta.cliente|default:"Público general" }}</p>
+      <p><strong>Total:</strong> ${{ venta.total }}</p>
+    </div>
+  </div>
+
+  <h3>Productos Vendidos</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th>Color</th>
+        <th>Talla</th>
+        <th>Precio Unitario</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for detalle in detalles %}
+        <tr>
+          <td>{{ detalle.inventario.codigo }}</td>
+          <td>{{ detalle.inventario.ropa.modelo }} - {{ detalle.inventario.ropa.marca }}</td>
+          <td>{{ detalle.inventario.color.nombre }}</td>
+          <td>{{ detalle.inventario.talla.nombre }}</td>
+          <td>${{ detalle.precio_unitario }}</td>
+          <td>{{ detalle.cantidad }}</td>
+          <td>${{ detalle.subtotal }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{% url 'lista_ventas' %}" class="btn btn-secondary">Volver a Ventas</a>
+  <a href="{% url 'inicio' %}" class="btn btn-secondary">Inicio</a>
+{% endblock %}

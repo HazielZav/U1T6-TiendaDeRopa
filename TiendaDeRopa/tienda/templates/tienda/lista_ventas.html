@@ -1,0 +1,37 @@
+{% extends "plantilla_base.html" %}
+{% block title %}Ventas · Sistema Tienda{% endblock %}
+{% block content %}
+  <h1 class="mb-3">Ventas Realizadas</h1>
+
+  {% if ventas %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for venta in ventas %}
+          <tr>
+            <td>{{ venta.id }}</td>
+            <td>{{ venta.fecha|date:"Y-m-d H:i" }}</td>
+            <td>{{ venta.cliente|default:"Público general" }}</td>
+            <td>${{ venta.total }}</td>
+            <td>
+              <a href="{% url 'detalle_venta' venta.id %}" class="btn btn-sm btn-info">Ver Detalle</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-info">No hay ventas registradas.</div>
+  {% endif %}
+
+  <a href="{% url 'crear_venta' %}" class="btn btn-success">Nueva Venta</a>
+  <a href="{% url 'inicio' %}" class="btn btn-secondary">Volver</a>
+{% endblock %}
