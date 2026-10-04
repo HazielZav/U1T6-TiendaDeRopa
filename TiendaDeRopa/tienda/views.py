@@ -1,16 +1,21 @@
 from django.db.models.aggregates import Sum
 from django.shortcuts import render
 from django.views import generic
-from .models import Cliente, Ropa, Inventario
+from .models import Cliente, Ropa, Inventario, Venta, DetalleVenta, PerfilUsuario
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .forms import InventarioForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db import transaction
 
 # Create your views here.
+@login_required
 def inicio(request):
     return render(request, "tienda/inicio.html")
 
+@login_required
 def lista_clientes(request):
     clientes = Cliente.objects.all()
 
@@ -18,7 +23,15 @@ def lista_clientes(request):
         "clientes": clientes
     })
 
+@login_required
 def actualizar_inventario(request, pk):
+    # Verificar que el usuario es ADMIN o ALMACENISTA
+    perfil = request.user.perfilusuario
+    if perfil.rol not in ['ADMIN', 'ALMACENISTA']:
+        return render(request, 'tienda/error.html', {
+            'mensaje': 'No tienes permiso para actualizar inventario.'
+        })
+
     ropa = get_object_or_404(Ropa, pk=pk)
     inventarios = Inventario.objects.filter(ropa=ropa)
     
