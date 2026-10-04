@@ -1,7 +1,26 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 
 # Create your models here.
+
+class PerfilUsuario(models.Model):
+    ROL_CHOICES = [
+        ('ADMIN', 'Administrador'),
+        ('ALMACENISTA', 'Almacenista'),
+        ('CAJERO', 'Cajero'),
+    ]
+    
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    rol = models.CharField(max_length=20, choices=ROL_CHOICES, default='CAJERO')
+    
+    class Meta:
+        verbose_name = "Perfil de Usuario"
+        verbose_name_plural = "Perfiles de Usuarios"
+    
+    def __str__(self):
+        return f"{self.usuario.username} - {self.get_rol_display()}"
+
 
 class Cliente(models.Model):
     nombre = models.CharField(max_length=40)
