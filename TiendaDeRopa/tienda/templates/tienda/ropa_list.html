@@ -1,0 +1,32 @@
+{% extends "plantilla_base.html" %}
+
+{% block content %}
+  <h1>Catálogo de Ropa</h1>
+
+  {% if ropa_list %}
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Modelo</th>
+          <th>Marca</th>
+          <th>Stock Total</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for producto in ropa_list %}
+          <tr>
+            <td>{{ producto.modelo }}</td>
+            <td>{{ producto.marca }}</td>
+            <td>{{ producto.total_inventario|default:"0" }}</td>
+            <td>
+              <a href="{% url 'actualizar_inventario' producto.pk %}" class="btn btn-primary btn-sm">Actualizar inventario</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No hay ropa registrada en el catálogo.</p>
+  {% endif %}
+{% endblock %}
