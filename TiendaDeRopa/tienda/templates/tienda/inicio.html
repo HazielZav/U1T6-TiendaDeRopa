@@ -2,9 +2,14 @@
 {% block title %}Inicio · Sistema Tienda{% endblock %}
 {% block content %}
   <h1 class="mb-3">Tienda de Ropa</h1>
+  <p class="lead">Bienvenido, {{ user.username }} ({{ user.perfilusuario.get_rol_display }})</p>
   <p class="lead">Selecciona una sección para continuar.</p>
-  <div class="d-flex gap-2">
+  <div class="d-flex gap-2 flex-wrap">
     <a href="{% url 'lista_clientes' %}" class="btn btn-primary">Clientes</a>
     <a href="{% url 'ropas' %}" class="btn btn-secondary">Catálogo de ropa</a>
+    {% if user.perfilusuario.rol == 'ADMIN' or user.perfilusuario.rol == 'CAJERO' %}
+      <a href="{% url 'crear_venta' %}" class="btn btn-success">Nueva Venta</a>
+      <a href="{% url 'lista_ventas' %}" class="btn btn-info">Consultar Ventas</a>
+    {% endif %}
   </div>
 {% endblock %}
