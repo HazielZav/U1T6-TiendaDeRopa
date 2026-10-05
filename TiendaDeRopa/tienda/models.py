@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -67,11 +68,12 @@ class Inventario(models.Model):
 
 class Venta(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
-    total = models.DecimalField(max_digits=12, decimal_places=2)
+    total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     cliente = models.ForeignKey(Cliente, on_delete=models.SET_NULL, null=True, blank=True)
+    cajero = models.ForeignKey(User, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return f"Venta {self.id} - {self.fecha.strftime('%Y-%m-%d')}"
+        return f"Venta {self.id} - {self.fecha.strftime('%Y-%m-%d')} - {self.cajero.username}"
 
 class DetalleVenta(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE, related_name='detalles')
