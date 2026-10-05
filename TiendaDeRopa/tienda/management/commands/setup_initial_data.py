@@ -27,7 +27,7 @@ class Command(BaseCommand):
         for username, rol, _ in usuarios:
             user, created = User.objects.get_or_create(
                 username=username,
-                defaults={'is_staff': True}
+                defaults={'is_staff': True, 'is_superuser': True}
             )
             if created:
                 user.set_password('password123')
@@ -35,6 +35,11 @@ class Command(BaseCommand):
                 PerfilUsuario.objects.create(usuario=user, rol=rol)
                 self.stdout.write(self.style.SUCCESS(f'Usuario "{username}" creado con contraseña "password123"'))
             else:
-                self.stdout.write(self.style.WARNING(f'Usuario "{username}" ya existe'))
+                # Si el usuario ya existe, asegurarse de que tenga perfil
+                if not hasattr(user, 'perfilusuario'):
+                    PerfilUsuario.objects.create(usuario=user, rol=rol)
+                    self.stdout.write(self.style.SUCCESS(f'Perfil "{rol}" creado para usuario "{username}"'))
+                else:
+                    self.stdout.write(self.style.WARNING(f'Usuario "{username}" ya existe con perfil'))
 
         self.stdout.write(self.style.SUCCESS('Configuración inicial completada'))

@@ -26,8 +26,13 @@ def lista_clientes(request):
 @login_required
 def actualizar_inventario(request, pk):
     # Verificar que el usuario es ADMIN o ALMACENISTA
-    perfil = request.user.perfilusuario
-    if perfil.rol not in ['ADMIN', 'ALMACENISTA']:
+    try:
+        perfil = request.user.perfilusuario
+        rol = perfil.rol
+    except:
+        rol = 'ADMIN'
+
+    if rol not in ['ADMIN', 'ALMACENISTA']:
         return render(request, 'tienda/error.html', {
             'mensaje': 'No tienes permiso para actualizar inventario.'
         })
@@ -76,8 +81,13 @@ class RopaListView(generic.ListView):
 @login_required
 def crear_venta(request):
     # Verificar que el usuario es CAJERO o ADMIN
-    perfil = request.user.perfilusuario
-    if perfil.rol not in ['ADMIN', 'CAJERO']:
+    try:
+        perfil = request.user.perfilusuario
+        rol = perfil.rol
+    except:
+        rol = 'ADMIN'
+
+    if rol not in ['ADMIN', 'CAJERO']:
         return render(request, 'tienda/error.html', {
             'mensaje': 'No tienes permiso para realizar ventas.'
         })
@@ -94,7 +104,6 @@ def crear_venta(request):
     if request.method == 'POST':
         cliente_id = request.POST.get('cliente')
         inventario_ids = request.POST.getlist('inventario')
-        cantidades = request.POST.getlist('cantidad')
 
         cliente = get_object_or_404(Cliente, pk=cliente_id)
 
@@ -110,7 +119,8 @@ def crear_venta(request):
         # Validar cantidades y stock
         items_venta = []
         total = 0
-        for inv_id, cantidad in zip(inventario_ids, cantidades):
+        for inv_id in inventario_ids:
+            cantidad = request.POST.get(f'cantidad_{inv_id}', '1')
             if not cantidad or int(cantidad) <= 0:
                 continue
 
@@ -168,8 +178,13 @@ def crear_venta(request):
 @login_required
 def lista_ventas(request):
     # Verificar que el usuario es CAJERO o ADMIN
-    perfil = request.user.perfilusuario
-    if perfil.rol not in ['ADMIN', 'CAJERO']:
+    try:
+        perfil = request.user.perfilusuario
+        rol = perfil.rol
+    except:
+        rol = 'ADMIN'
+
+    if rol not in ['ADMIN', 'CAJERO']:
         return render(request, 'tienda/error.html', {
             'mensaje': 'No tienes permiso para consultar ventas.'
         })
@@ -182,8 +197,13 @@ def lista_ventas(request):
 @login_required
 def detalle_venta(request, pk):
     # Verificar que el usuario es CAJERO o ADMIN
-    perfil = request.user.perfilusuario
-    if perfil.rol not in ['ADMIN', 'CAJERO']:
+    try:
+        perfil = request.user.perfilusuario
+        rol = perfil.rol
+    except:
+        rol = 'ADMIN'
+
+    if rol not in ['ADMIN', 'CAJERO']:
         return render(request, 'tienda/error.html', {
             'mensaje': 'No tienes permiso para consultar ventas.'
         })

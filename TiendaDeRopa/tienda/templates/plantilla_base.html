@@ -17,7 +17,7 @@
                 {% if user.is_authenticated %}
                     <a class="nav-link" href="{% url 'lista_clientes' %}">Clientes</a>
                     <a class="nav-link" href="{% url 'ropas' %}">Ropas</a>
-                    {% if user.perfilusuario.rol == 'ADMIN' or user.perfilusuario.rol == 'CAJERO' %}
+                    {% if user.is_superuser or user.perfilusuario.rol == 'ADMIN' or user.perfilusuario.rol == 'CAJERO' %}
                         <a class="nav-link" href="{% url 'crear_venta' %}">Nueva Venta</a>
                         <a class="nav-link" href="{% url 'lista_ventas' %}">Ventas</a>
                     {% endif %}
