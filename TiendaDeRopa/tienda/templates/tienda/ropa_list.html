@@ -1,31 +1,48 @@
 {% extends "plantilla_base.html" %}
 
 {% block content %}
-  <h1>Catálogo de Ropa</h1>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Catálogo de Ropa</h2>
+    <div>
+        <!-- Botón para recargar stock -->
+        <a href="#" class="btn btn-secondary me-2">Actualizar Stock General</a>
+        <a href="{% url 'nueva_ropa' %}" class="btn btn-primary">Agregar Nueva Prenda</a>
+    </div>
+  </div>
 
   {% if ropa_list %}
-    <table class="table table-striped table-bordered table-hover">
-      <thead class="table-dark">
-        <tr>
-          <th>Modelo</th>
-          <th>Marca</th>
-          <th>Stock Total</th>
-          <th>Acción</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for producto in ropa_list %}
-          <tr>
-            <td>{{ producto.modelo }}</td>
-            <td>{{ producto.marca }}</td>
-            <td>{{ producto.total_inventario|default:"0" }}</td>
-            <td>
-              <a href="{% url 'actualizar_inventario' producto.pk %}" class="btn btn-primary btn-sm">Actualizar inventario</a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="card shadow-sm">
+      <div class="card-body p-0">
+          <table class="table table-hover mb-0">
+              <thead class="table-dark">
+                  <tr><th>Modelo</th><th>Marca</th><th>Tipo</th><th>Precio</th><th>Stock Total</th><th>Acciones</th></tr>
+              </thead>
+              <tbody>
+                  {% for prenda in ropa_list %}
+                  <tr>
+                      <td>{{ prenda.modelo }}</td>
+                      <td>{{ prenda.marca }}</td>
+                      <td>{{ prenda.tipo.nombre }}</td>
+                      <td>${{ prenda.precio }}</td>
+                      <td>
+                          {% if prenda.total_inventario %}
+                              <span class="badge bg-success">{{ prenda.total_inventario }} unidades</span>
+                          {% else %}
+                              <span class="badge bg-danger">Sin stock</span>
+                          {% endif %}
+                      </td>
+                      <td>
+                          <!-- Botón para la vista de actualizar inventario individual -->
+                          <a href="{% url 'actualizar_inventario' prenda.id %}" class="btn btn-sm btn-outline-primary">Entrada Almacén</a>
+                      </td>
+                  </tr>
+                  {% empty %}
+                  <tr><td colspan="6" class="text-center text-muted py-3">No hay prendas registradas.</td></tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      </div>
+  </div>
   {% else %}
     <p>No hay ropa registrada en el catálogo.</p>
   {% endif %}

@@ -1,0 +1,36 @@
+{% extends 'plantilla_base.html' %}
+
+{% block title %}Catálogo de Colores{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Catálogo de Colores</h2>
+    <!-- Este botón lleva al form_generico.html -->
+    <a href="{% url 'nuevo_color' %}" class="btn btn-primary">Agregar Nuevo Color</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table id="tablaColores" class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre del Color</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for color in colores %}
+                <tr>
+                    <td>{{ color.id }}</td>
+                    <td>{{ color.nombre }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center text-muted py-3">No hay colores registrados aún.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

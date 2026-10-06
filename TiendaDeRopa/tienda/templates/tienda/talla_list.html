@@ -1,0 +1,30 @@
+{% extends 'plantilla_base.html' %}
+
+{% block title %}Catálogo de Tallas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Catálogo de Tallas</h2>
+    <a href="{% url 'nueva_talla' %}" class="btn btn-primary">Agregar Nueva Talla</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table id="tablaTallas" class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr><th>ID</th><th>Talla</th></tr>
+            </thead>
+            <tbody>
+                {% for talla in tallas %}
+                <tr>
+                    <td>{{ talla.id }}</td>
+                    <td>{{ talla.nombre }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="2" class="text-center text-muted py-3">No hay tallas registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
