@@ -1,0 +1,71 @@
+{% extends 'plantilla_base.html' %}
+
+{% block title %}Comprobante de Venta{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow mt-4">
+            <div class="card-header bg-success text-white text-center">
+                <h3 class="mb-0">Venta Completada SIII</h3>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-sm-6">
+                        <h6 class="mb-1 text-muted">Folio:</h6>
+                        <h5>#{{ venta.id }}</h5>
+                        <h6 class="mb-1 text-muted mt-3">Fecha:</h6>
+                        <p>{{ venta.fecha|date:"d/m/Y H:i" }}</p>
+                    </div>
+                    <div class="col-sm-6 text-sm-end">
+                        <h6 class="mb-1 text-muted">Cliente:</h6>
+                        <h5>{{ venta.cliente.nombre }} {{ venta.cliente.apellidos|default_if_none:"" }}</h5>
+                        <h6 class="mb-1 text-muted mt-3">Atendido por:</h6>
+                        <p>{{ venta.cajero.username }}</p>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped border">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Artículo</th>
+                                <th class="text-center">Cant.</th>
+                                <th class="text-end">P. Unitario</th>
+                                <th class="text-end">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Gracias al related_name='detalles' de tu modelo, podemos iterar así de fácil -->
+                            {% for detalle in venta.detalles.all %}
+                            <tr>
+                                <td>
+                                    <strong>{{ detalle.inventario.ropa.modelo }}</strong><br>
+                                    <small class="text-muted">{{ detalle.inventario.color.nombre }} - {{ detalle.inventario.talla.nombre }}</small>
+                                </td>
+                                <td class="text-center">{{ detalle.cantidad }}</td>
+                                <td class="text-end">${{ detalle.precio_unitario }}</td>
+                                <td class="text-end fw-bold">
+                                    ${% widthratio detalle.precio_unitario 1 detalle.cantidad %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end border-0"><h4 class="mb-0 mt-2">TOTAL</h4></td>
+                                <td class="text-end border-0"><h3 class="text-success mb-0 mt-2">${{ venta.total }}</h3></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-secondary me-2" onclick="window.print()">Imprimir Ticket</button>
+                    <a href="{% url 'punto_de_venta' %}" class="btn btn-primary">Nueva Venta</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

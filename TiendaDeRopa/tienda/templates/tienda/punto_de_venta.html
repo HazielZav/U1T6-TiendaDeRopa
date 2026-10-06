@@ -1,0 +1,133 @@
+{% extends 'plantilla_base.html' %}
+
+{% block title %}Punto de Venta{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-12">
+        <h2>Punto de Venta</h2>
+        <!-- Alertas de mensajes -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <!-- Inventario Disponible -->
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Productos Disponibles</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Código</th>
+                            <th>Producto</th>
+                            <th>Stock</th>
+                            <th>Precio</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in inventario %}
+                        <tr>
+                            <td>{{ item.codigo }}</td>
+                            <td>{{ item.ropa.modelo }} ({{ item.color.nombre }} - {{ item.talla.nombre }})</td>
+                            <td><span class="badge bg-success">{{ item.unidades }}</span></td>
+                            <td>${{ item.ropa.precio }}</td>
+                            <td>
+                                <!-- Formulario para agregar a la venta -->
+                                <form action="{% url 'agregar_a_venta' item.id %}" method="post" class="d-flex">
+                                    {% csrf_token %}
+                                    <input type="number" name="cantidad" value="1" min="1" max="{{ item.unidades }}" class="form-control form-control-sm me-2" style="width: 70px;">
+                                    <button type="submit" class="btn btn-sm btn-primary">Agregar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" class="text-center py-3">No hay productos en inventario.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detalle de la Venta -->
+    <div class="col-md-5">
+        <div class="card shadow-sm border-primary">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Venta Actual</h5>
+                <a href="{% url 'vaciar_venta' %}" class="btn btn-sm btn-danger">Vaciar</a>
+            </div>
+            
+            <div class="card-body">
+                <!-- Formulario maestro para confirmar la venta -->
+                <form action="{% url 'confirmar_venta' %}" method="post">
+                    {% csrf_token %}
+                    
+                    <!-- Selección del Client -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Cliente</label>
+                        <select name="cliente" class="form-select">
+                            {% for c in clientes %}
+                                <option value="{{ c.id }}" {% if c.id == cliente_default.id %}selected{% endif %}>
+                                    {{ c.nombre }} {{ c.apellidos|default_if_none:"" }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Lista de productos -->
+                    <h6 class="fw-bold border-bottom pb-2">Artículos</h6>
+                    <ul class="list-group list-group-flush mb-3">
+                        {% for item in items_venta %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="my-0">
+                                    {{ item.inventario.ropa.modelo }} 
+                                    <small class="text-muted">({{ item.inventario.color.nombre }} - {{ item.inventario.talla.nombre }})</small>
+                                </h6>
+                                <small class="text-muted">{{ item.cantidad }}x ${{ item.inventario.ropa.precio }}</small>
+                            </div>
+                            
+                            <div class="d-flex align-items-center">
+                                <span class="text-primary fw-bold me-3">${{ item.subtotal }}</span>
+                                
+                                <!-- Eliminar individualmente -->
+                                <a href="{% url 'eliminar_de_venta' item.inventario.id %}" class="btn btn-sm btn-outline-danger" title="Quitar artículo">
+                                    X
+                                </a>
+                            </div>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item text-center text-muted">
+                            La venta actual está vacía.
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <hr>
+
+                    <!-- Total y Botón de Cobro -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">Total:</h4>
+                        <h4 class="mb-0 text-success fw-bold">${{ total_venta }}</h4>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 fs-5 fw-bold" {% if not items_venta %}disabled{% endif %}>
+                        Confirmar Venta
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

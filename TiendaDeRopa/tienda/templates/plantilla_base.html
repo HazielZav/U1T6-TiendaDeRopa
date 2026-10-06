@@ -11,10 +11,69 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Tienda de Ropa</a>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Tienda de Ropa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNavegacion">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="menuNavegacion">
+                <ul class="navbar-nav me-auto">
+                    
+                    <!-- ALMACENISTA Y ADMINISTRADOR -->
+                    {% if perms.tienda.view_ropa %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'ropas' %}">Inventario de Ropa</a>
+                    </li>
+                    {% endif %}
+
+                    <!-- ADMINISTRADOr -->
+                    {% if perms.tienda.add_color %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Administración
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'lista_colores' %}">Colores</a></li>
+                            <li><a class="dropdown-item" href="{% url 'lista_tipos' %}">Tipos</a></li>
+                            <li><a class="dropdown-item" href="{% url 'lista_tallas' %}">Tallas</a></li>
+                            <li><a class="dropdown-item" href="{% url 'lista_proveedores' %}">Proveedores</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+
+                    <!-- CAJERO Y ADMINISTRADOR -->
+                    {% if perms.tienda.view_cliente %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lista_clientes' %}">Clientes</a>
+                    </li>
+                    {% endif %}
+
+                    <!-- CAJERO -->
+                    {% if perms.tienda.add_venta %}
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold text-success" href="{% url 'punto_de_venta' %}">Punto de Venta</a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+
+                <!-- USUARIO-->
+                {% if user.is_authenticated %}
+                    <span class="navbar-text me-3 text-light">
+                        Hola, <strong>{{ user.username }}</strong>
+                    </span>
+                    <form action="{% url 'logout' %}" method="post" class="d-flex">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Cerrar Sesión</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-sm btn-outline-light">Iniciar Sesión</a>
+                {% endif %}
+            </div>
         </div>
     </nav>
+       
 
     <div class="container mt-4">
         {% block content %}{% endblock %}
