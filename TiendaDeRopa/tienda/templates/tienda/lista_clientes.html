@@ -15,7 +15,14 @@
         <div class="card-body p-0">
             <table id="tablaClientes" class="table table-hover mb-0">
                 <thead class="table-dark">
-                    <tr><th>ID</th><th>Nombre</th><th>Apellidos</th><th>Email</th><th>Teléfono</th></tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Acciones</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {% for cliente in clientes %}
@@ -25,10 +32,11 @@
                         <td>{{ cliente.apellidos }}</td>
                         <td>{{ cliente.email|default:"N/A" }}</td>
                         <td>{{ cliente.telefono|default:"N/A" }}</td>
-                    </tr>
-                    <td>
+                        <td>
                         <a href="{% url 'editar_cliente' cliente.id %}" class="btn btn-sm btn-outline-warning">Editar</a>
                     </td>
+                    </tr>
+                    
                     {% empty %}
                     <tr><td colspan="5" class="text-center text-muted py-3">No hay clientes registrados.</td></tr>
                     {% endfor %}
