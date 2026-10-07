@@ -30,6 +30,13 @@ def lista_clientes(request):
         "clientes": clientes
     })
 
+class ClienteUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
+    model = Cliente
+    fields = ['nombre', 'apellidos', 'email', 'telefono']
+    template_name = 'tienda/form_generico.html'
+    success_url = reverse_lazy('lista_clientes')
+    permission_required = 'tienda.change_cliente'
+
 # Inventario
 @login_required
 @permission_required('tienda.change_inventario', raise_exception=True)
@@ -84,6 +91,13 @@ class RopaListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView
         # Esta línea hace el recuento total de todas las tallas/colores
         return Ropa.objects.annotate(total_inventario=Sum('inventario__unidades'))
 
+class RopaUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
+    model = Ropa
+    fields = ['modelo', 'descripcion', 'marca', 'precio', 'tipo', 'proveedores']
+    template_name = 'tienda/form_generico.html'
+    success_url = reverse_lazy('ropas')
+    permission_required = 'tienda.change_ropa'
+
 # Color
 class ColorListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     model = Color
@@ -97,6 +111,13 @@ class ColorCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.Creat
     template_name = 'tienda/form_generico.html'
     success_url = reverse_lazy('lista_colores')
     permission_required = 'tienda.add_color'
+
+class ColorUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
+    model = Color
+    fields = ['nombre']
+    template_name = 'tienda/form_generico.html'
+    success_url = reverse_lazy('lista_colores')
+    permission_required = 'tienda.change_color'
 
 #Tipo
 class TipoListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
@@ -112,6 +133,13 @@ class TipoCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.Create
     success_url = reverse_lazy('lista_tipos')
     permission_required = 'tienda.add_tipo'
 
+class TipoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
+    model = Tipo
+    fields = ['nombre']
+    template_name = 'tienda/form_generico.html'
+    success_url = reverse_lazy('lista_tipos')
+    permission_required = 'tienda.change_tipo'
+
 # Talla
 class TallaListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     model = Talla
@@ -126,6 +154,13 @@ class TallaCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.Creat
     success_url = reverse_lazy('lista_tallas')
     permission_required = 'tienda.add_talla'
 
+class TallaUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
+    model = Talla
+    fields = ['nombre']
+    template_name = 'tienda/form_generico.html'
+    success_url = reverse_lazy('lista_tallas')
+    permission_required = 'tienda.change_talla'
+
 # PRoveedor
 class ProveedorListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     model = Proveedor
@@ -139,6 +174,13 @@ class ProveedorCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.C
     template_name = 'tienda/form_generico.html'
     success_url = reverse_lazy('lista_proveedores')
     permission_required = 'tienda.add_proveedor'
+
+class ProveedorUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
+    model = Proveedor
+    fields = ['nombre_empresa', 'email', 'telefono']
+    template_name = 'tienda/form_generico.html'
+    success_url = reverse_lazy('lista_proveedores')
+    permission_required = 'tienda.change_proveedor'
 
 # Punto de venta
 @login_required

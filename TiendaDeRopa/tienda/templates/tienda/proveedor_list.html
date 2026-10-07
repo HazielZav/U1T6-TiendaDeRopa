@@ -22,6 +22,9 @@
                     <td>{{ proveedor.email|default:"N/A" }}</td>
                     <td>{{ proveedor.telefono|default:"N/A" }}</td>
                 </tr>
+                <td>
+                    <a href="{% url 'editar_proveedor' proveedor.id %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                </td>
                 {% empty %}
                 <tr><td colspan="4" class="text-center text-muted py-3">No hay proveedores registrados.</td></tr>
                 {% endfor %}

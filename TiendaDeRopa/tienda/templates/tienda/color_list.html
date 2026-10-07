@@ -5,7 +5,7 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Catálogo de Colores</h2>
-    <!-- Este botón lleva al form_generico.html -->
+    
     <a href="{% url 'nuevo_color' %}" class="btn btn-primary">Agregar Nuevo Color</a>
 </div>
 
@@ -24,6 +24,9 @@
                     <td>{{ color.id }}</td>
                     <td>{{ color.nombre }}</td>
                 </tr>
+                <td>
+                    <a href="{% url 'editar_color' color.id %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                </td>
                 {% empty %}
                 <tr>
                     <td colspan="2" class="text-center text-muted py-3">No hay colores registrados aún.</td>

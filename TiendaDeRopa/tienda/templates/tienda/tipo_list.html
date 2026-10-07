@@ -20,6 +20,9 @@
                     <td>{{ tipo.id }}</td>
                     <td>{{ tipo.nombre }}</td>
                 </tr>
+                <td>
+                    <a href="{% url 'editar_tipo' tipo.id %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                </td>
                 {% empty %}
                 <tr><td colspan="2" class="text-center text-muted py-3">No hay tipos registrados.</td></tr>
                 {% endfor %}

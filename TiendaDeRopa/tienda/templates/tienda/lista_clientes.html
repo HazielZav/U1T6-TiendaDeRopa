@@ -26,6 +26,9 @@
                         <td>{{ cliente.email|default:"N/A" }}</td>
                         <td>{{ cliente.telefono|default:"N/A" }}</td>
                     </tr>
+                    <td>
+                        <a href="{% url 'editar_cliente' cliente.id %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                    </td>
                     {% empty %}
                     <tr><td colspan="5" class="text-center text-muted py-3">No hay clientes registrados.</td></tr>
                     {% endfor %}

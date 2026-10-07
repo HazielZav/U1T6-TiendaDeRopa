@@ -20,6 +20,9 @@
                     <td>{{ talla.id }}</td>
                     <td>{{ talla.nombre }}</td>
                 </tr>
+                <td>
+                    <a href="{% url 'editar_talla' talla.id %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                </td>
                 {% empty %}
                 <tr><td colspan="2" class="text-center text-muted py-3">No hay tallas registradas.</td></tr>
                 {% endfor %}

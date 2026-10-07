@@ -34,6 +34,7 @@
                       <td>
                           <!-- Botón para la vista de actualizar inventario individual -->
                           <a href="{% url 'actualizar_inventario' prenda.id %}" class="btn btn-sm btn-outline-primary">Entrada Almacén</a>
+                          <a href="{% url 'editar_ropa' prenda.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
                       </td>
                   </tr>
                   {% empty %}
