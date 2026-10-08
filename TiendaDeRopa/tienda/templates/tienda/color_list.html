@@ -27,6 +27,10 @@
                     <td>{{ color.nombre }}</td>
                     <td>
                     <a href="{% url 'editar_color' color.id %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                    <form method="POST" action="{% url 'eliminar_color' color.id %}" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este registro?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </form>
                 </td>
                 </tr>
                 

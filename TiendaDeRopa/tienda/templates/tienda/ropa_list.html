@@ -4,8 +4,7 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Catálogo de Ropa</h2>
     <div>
-        <!-- Botón para recargar stock -->
-        <a href="#" class="btn btn-secondary me-2">Actualizar Stock General</a>
+        <!-- Recargar <a href="#" class="btn btn-secondary me-2">Recargar</a> -->
         <a href="{% url 'nueva_ropa' %}" class="btn btn-primary">Agregar Nueva Prenda</a>
     </div>
   </div>
@@ -36,12 +35,22 @@
                           {% else %}
                               <span class="badge bg-danger">Sin stock</span>
                           {% endif %}
-                      </td>
-                      <td>
-                          <!-- Botón para la vista de actualizar inventario individual -->
-                          <a href="{% url 'actualizar_inventario' prenda.id %}" class="btn btn-sm btn-outline-primary">Entrada Almacén</a>
-                          <a href="{% url 'editar_ropa' prenda.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
-                      </td>
+                        </td>
+                        <td>
+                            <!-- Botón para la vista de actualizar inventario individual -->
+                            <a href="{% url 'actualizar_inventario' prenda.id %}" class="btn btn-sm btn-outline-primary">Entrada Almacén</a>
+                            
+                            {% if perms.tienda.change_ropa %}
+                                <a href="{% url 'editar_ropa' prenda.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                            {% endif %}
+                            
+                            {% if perms.tienda.delete_ropa %}
+                                <form method="POST" action="{% url 'eliminar_ropa' prenda.id %}" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este registro?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                </form>
+                            {% endif %}
+                        </td>
                   </tr>
                   {% empty %}
                   <tr><td colspan="6" class="text-center text-muted py-3">No hay prendas registradas.</td></tr>

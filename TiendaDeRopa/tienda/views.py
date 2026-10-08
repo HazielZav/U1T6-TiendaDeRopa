@@ -26,6 +26,7 @@ class ClienteCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.Cre
 def lista_clientes(request):
     clientes = Cliente.objects.all()
 
+    clientes = Cliente.objects.filter(activo=True)
     return render(request, "tienda/lista_clientes.html", {
         "clientes": clientes
     })
@@ -36,6 +37,21 @@ class ClienteUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.Upd
     template_name = 'tienda/form_generico.html'
     success_url = reverse_lazy('lista_clientes')
     permission_required = 'tienda.change_cliente'
+
+class ClienteDeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
+    model = Cliente
+    success_url = reverse_lazy('lista_clientes')
+    permission_required = 'tienda.delete_cliente'
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.activo = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    # nomas por si acaso
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.get_success_url())
 
 # Inventario
 @login_required
@@ -82,14 +98,15 @@ class RopaCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.Create
     permission_required = 'tienda.add_ropa'
 
 class RopaListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
-    model = Ropa
+    #model = Ropa
+    #queryset = Ropa.objects.filter(activo=True)
     context_object_name = 'ropa_list'
     template_name = 'tienda/ropa_list.html'
     permission_required = 'tienda.view_ropa'
 
     def get_queryset(self):
         # Esta línea hace el recuento total de todas las tallas/colores
-        return Ropa.objects.annotate(total_inventario=Sum('inventario__unidades'))
+        return Ropa.objects.filter(activo=True).annotate(total_inventario=Sum('inventario__unidades'))
 
 class RopaUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
     model = Ropa
@@ -98,12 +115,28 @@ class RopaUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.Update
     success_url = reverse_lazy('ropas')
     permission_required = 'tienda.change_ropa'
 
+class RopaDeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
+    model = Ropa
+    success_url = reverse_lazy('ropas')
+    permission_required = 'tienda.delete_ropa'
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.activo = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    # nomas por si acaso
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.get_success_url())
+
 # Color
 class ColorListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     model = Color
     template_name = 'tienda/color_list.html'
     context_object_name = 'colores'
     permission_required = 'tienda.view_color'
+    queryset = Color.objects.filter(activo=True)
 
 class ColorCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     model = Color
@@ -119,12 +152,28 @@ class ColorUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.Updat
     success_url = reverse_lazy('lista_colores')
     permission_required = 'tienda.change_color'
 
+class ColorDeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
+    model = Color
+    success_url = reverse_lazy('lista_colores')
+    permission_required = 'tienda.delete_color'
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.activo = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    # nomas por si acaso
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.get_success_url())
+
 #Tipo
 class TipoListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     model = Tipo
     template_name = 'tienda/tipo_list.html'
     context_object_name = 'tipos'
     permission_required = 'tienda.view_tipo'
+    queryset = Tipo.objects.filter(activo=True)
 
 class TipoCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     model = Tipo
@@ -140,12 +189,28 @@ class TipoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.Update
     success_url = reverse_lazy('lista_tipos')
     permission_required = 'tienda.change_tipo'
 
+class TipoDeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
+    model = Tipo
+    success_url = reverse_lazy('lista_tipos')
+    permission_required = 'tienda.delete_tipo'
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.activo = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    # nomas por si acaso
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.get_success_url())
+
 # Talla
 class TallaListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     model = Talla
     template_name = 'tienda/talla_list.html'
     context_object_name = 'tallas'
     permission_required = 'tienda.view_talla'
+    queryset = Talla.objects.filter(activo=True)
 
 class TallaCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     model = Talla
@@ -161,12 +226,28 @@ class TallaUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.Updat
     success_url = reverse_lazy('lista_tallas')
     permission_required = 'tienda.change_talla'
 
+class TallaDeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
+    model = Talla
+    success_url = reverse_lazy('lista_tallas')
+    permission_required = 'tienda.delete_talla'
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.activo = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    # nomas por si acaso
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.get_success_url())
+
 # PRoveedor
 class ProveedorListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     model = Proveedor
     template_name = 'tienda/proveedor_list.html'
     context_object_name = 'proveedores'
     permission_required = 'tienda.view_proveedor'
+    queryset = Proveedor.objects.filter(activo=True)
 
 class ProveedorCreateView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     model = Proveedor
@@ -181,6 +262,21 @@ class ProveedorUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.U
     template_name = 'tienda/form_generico.html'
     success_url = reverse_lazy('lista_proveedores')
     permission_required = 'tienda.change_proveedor'
+
+class ProveedorDeleteView(LoginRequiredMixin, PermissionRequiredMixin, generic.DeleteView):
+    model = Proveedor
+    success_url = reverse_lazy('lista_proveedores')
+    permission_required = 'tienda.delete_proveedor'
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.activo = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    # nomas por si acaso
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.get_success_url())
 
 # Punto de venta
 @login_required

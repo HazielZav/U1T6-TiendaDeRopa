@@ -10,27 +10,33 @@ urlpatterns = [
     path('clientes/', views.lista_clientes, name='lista_clientes'),
     path('clientes/nuevo/', views.ClienteCreateView.as_view(), name='nuevo_cliente'),
     path('clientes/<int:pk>/editar/', views.ClienteUpdateView.as_view(), name='editar_cliente'),
+    path('clientes/<int:pk>/eliminar/', views.ClienteDeleteView.as_view(), name='eliminar_cliente'),
 
     path('ropas/', views.RopaListView.as_view(), name='ropas'),
     path('ropa/nuevo/', views.RopaCreateView.as_view(), name='nueva_ropa'),
     path('ropa/<int:pk>/inventario/', views.actualizar_inventario, name='actualizar_inventario'),
     path('ropa/<int:pk>/editar/', views.RopaUpdateView.as_view(), name='editar_ropa'),
+    path('ropa/<int:pk>/eliminar/', views.RopaDeleteView.as_view(), name='eliminar_ropa'),
 
     path('tipos/', views.TipoListView.as_view(), name='lista_tipos'),
     path('tipos/nuevo/', views.TipoCreateView.as_view(), name='nuevo_tipo'),
     path('tipos/<int:pk>/editar/', views.TipoUpdateView.as_view(), name='editar_tipo'),
+    path('tipos/<int:pk>/eliminar/', views.TipoDeleteView.as_view(), name='eliminar_tipo'),
 
     path('tallas/', views.TallaListView.as_view(), name='lista_tallas'),
     path('tallas/nuevo/', views.TallaCreateView.as_view(), name='nueva_talla'),
     path('tallas/<int:pk>/editar/', views.TallaUpdateView.as_view(), name='editar_talla'),
+    path('tallas/<int:pk>/eliminar/', views.TallaDeleteView.as_view(), name='eliminar_talla'),
 
     path('proveedores/', views.ProveedorListView.as_view(), name='lista_proveedores'),
     path('proveedores/nuevo/', views.ProveedorCreateView.as_view(), name='nuevo_proveedor'),
     path('proveedores/<int:pk>/editar/', views.ProveedorUpdateView.as_view(), name='editar_proveedor'),
+    path('proveedores/<int:pk>/eliminar/', views.ProveedorDeleteView.as_view(), name='eliminar_proveedor'),
 
     path('colores/', views.ColorListView.as_view(), name='lista_colores'),
     path('colores/nuevo/', views.ColorCreateView.as_view(), name='nuevo_color'),
     path('colores/<int:pk>/editar/', views.ColorUpdateView.as_view(), name='editar_color'),
+    path('colores/<int:pk>/eliminar/', views.ColorDeleteView.as_view(), name='eliminar_color'),
 
     path('punto-de-venta/', views.punto_de_venta, name='punto_de_venta'),
     path('punto-de-venta/agregar/<int:inv_id>/', views.agregar_a_venta, name='agregar_a_venta'),

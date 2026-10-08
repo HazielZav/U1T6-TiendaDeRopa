@@ -33,7 +33,15 @@
                         <td>{{ cliente.email|default:"N/A" }}</td>
                         <td>{{ cliente.telefono|default:"N/A" }}</td>
                         <td>
-                        <a href="{% url 'editar_cliente' cliente.id %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                            {% if perms.tienda.change_cliente %}
+                                <a href="{% url 'editar_cliente' cliente.id %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                            {% endif %}
+                            {% if perms.tienda.delete_cliente %}
+                                <form method="POST" action="{% url 'eliminar_cliente' cliente.id %}" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este registro?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                </form>
+                            {% endif %}
                     </td>
                     </tr>
                     

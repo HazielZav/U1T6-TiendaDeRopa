@@ -9,6 +9,7 @@ class Cliente(models.Model):
     apellidos = models.CharField(max_length=40)
     email = models.EmailField(max_length=80, null=True, blank=True)
     telefono = models.CharField(max_length=20, null=True, blank=True)
+    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.nombre} {self.apellidos}"
@@ -17,6 +18,7 @@ class Proveedor(models.Model):
     nombre_empresa = models.CharField(max_length=100)
     email = models.EmailField(max_length=80, null=True, blank=True)
     telefono = models.CharField(max_length=20, null=True, blank=True)
+    activo = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "Proveedores"
@@ -26,12 +28,14 @@ class Proveedor(models.Model):
 
 class Tipo(models.Model):
     nombre = models.CharField(max_length=40)
+    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre
 
 class Color(models.Model):
     nombre = models.CharField(max_length=40)
+    activo = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "Colores"
@@ -41,6 +45,7 @@ class Color(models.Model):
 
 class Talla(models.Model):
     nombre = models.CharField(max_length=20)
+    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre
@@ -50,8 +55,9 @@ class Ropa(models.Model):
     descripcion = models.TextField(null=True, blank=True)
     marca = models.CharField(max_length=100)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
-    tipo = models.ForeignKey(Tipo, on_delete=models.RESTRICT)
-    proveedores = models.ManyToManyField(Proveedor, related_name='ropas')
+    tipo = models.ForeignKey(Tipo, on_delete=models.RESTRICT, limit_choices_to={'activo': True})
+    proveedores = models.ManyToManyField(Proveedor, related_name='ropas', limit_choices_to={'activo': True})
+    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.modelo} - {self.marca}"
